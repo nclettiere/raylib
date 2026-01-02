@@ -1183,8 +1183,8 @@ static int rlGetPixelDataSize(int width, int height, int format);   // Get pixel
 static rl_Matrix rlMatrixIdentity(void);                       // Get identity matrix
 #if defined(GRAPHICS_API_OPENGL_33) || defined(GRAPHICS_API_OPENGL_ES2)
 // Auxiliar matrix math functions
-typedef struct float16 { float v[16]; } float16;
-static float16 rlMatrixToFloatV(rl_Matrix mat);             // Get float array of matrix data
+typedef struct rl_float16 { float v[16]; } rl_float16;
+static rl_float16 rlMatrixToFloatV(rl_Matrix mat);             // Get float array of matrix data
 #define rlMatrixToFloat(mat) (rlMatrixToFloatV(mat).v)      // Get float vector for rl_Matrix
 static rl_Matrix rlMatrixMultiply(rl_Matrix left, rl_Matrix right);  // Multiply two matrices
 static rl_Matrix rlMatrixTranspose(rl_Matrix mat);                // Transposes provided matrix
@@ -5275,9 +5275,9 @@ static rl_Matrix rlMatrixIdentity(void)
 }
 #if defined(GRAPHICS_API_OPENGL_33) || defined(GRAPHICS_API_OPENGL_ES2)
 // Get float array of matrix data
-static float16 rlMatrixToFloatV(rl_Matrix mat)
+static rl_float16 rlMatrixToFloatV(rl_Matrix mat)
 {
-    float16 result = { 0 };
+    rl_float16 result = { 0 };
 
     result.v[0] = mat.m0;
     result.v[1] = mat.m1;
