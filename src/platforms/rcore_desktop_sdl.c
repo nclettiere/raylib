@@ -277,6 +277,11 @@ static const int CursorsLUT[] = {
 // IMPORTANT: Might need to call SDL_CleanupEvent somewhere see :https://github.com/libsdl-org/SDL/issues/3540#issuecomment-1793449852
 #define SDL_DROPFILE  SDL_EVENT_DROP_FILE
 
+void* rl_GetWindowSDL()
+{
+	return (void*)platform.window;
+}
+
 // SDL2 implementation for SDL3 function
 const char *SDL_GameControllerNameForIndex(int joystickIndex)
 {
