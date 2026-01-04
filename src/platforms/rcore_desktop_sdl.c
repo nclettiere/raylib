@@ -113,6 +113,10 @@ extern CoreData CORE;                   // Global CORE state context
 
 static PlatformData platform = { 0 };   // Platform specific data
 
+#define MAX_SDL_EVENT_CALLBACKS 8
+static rl_SDLEventCallback sdlEventCallbacks[MAX_SDL_EVENT_CALLBACKS] = { 0 };
+static int sdlEventCallbackCount = 0;
+
 static const rl_KeyboardKey mapScancodeToKey[SCANCODE_MAPPED_NUM] = {
     KEY_NULL,           // SDL_SCANCODE_UNKNOWN
     0,
@@ -1417,6 +1421,11 @@ void rl_PollInputEvents(void)
     SDL_Event event = { 0 };
     while (SDL_PollEvent(&event) != 0)
     {
+		for (int i = 0; i < sdlEventCallbackCount; i++)
+        {
+            if (sdlEventCallbacks[i]) sdlEventCallbacks[i](&event);
+        }
+	
         // All input events can be processed after polling
         switch (event.type)
         {
@@ -2179,6 +2188,28 @@ static int GetCodepointNextSDL(const char *text, int *codepointSize)
     }
 
     return codepoint;
+}
+
+
+void rl_RegisterSDLEventCallback(rl_SDLEventCallback callback)
+{
+    if (callback && sdlEventCallbackCount < MAX_SDL_EVENT_CALLBACKS)
+    {
+        sdlEventCallbacks[sdlEventCallbackCount++] = callback;
+    }
+}
+
+void rl_UnregisterSDLEventCallback(rl_SDLEventCallback callback)
+{
+    for (int i = 0; i < sdlEventCallbackCount; i++)
+    {
+        if (sdlEventCallbacks[i] == callback)
+        {
+            sdlEventCallbacks[i] = sdlEventCallbacks[--sdlEventCallbackCount];
+            sdlEventCallbacks[sdlEventCallbackCount] = NULL;
+            break;
+        }
+    }
 }
 
 // Update CORE input touch point info from SDL touch data
