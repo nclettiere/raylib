@@ -282,6 +282,11 @@ void* rl_GetWindowSDL()
 	return (void*)platform.window;
 }
 
+void* rl_GetOpenGLContext()
+{
+	return (void*)&platform.glContext;
+}
+
 // SDL2 implementation for SDL3 function
 const char *SDL_GameControllerNameForIndex(int joystickIndex)
 {
