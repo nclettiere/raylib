@@ -968,10 +968,15 @@ typedef bool (*SaveFileTextCallback)(const char *fileName, const char *text); //
 extern "C" {            // Prevents name mangling of functions
 #endif
 
-// Window-related functions
-rl_RLAPI void rl_InitWindow(int width, int height, const char *title);  // Initialize window and OpenGL context
+typedef void (*rl_SDLEventCallback)(void *sdl_event);
+
 rl_RLAPI void* rl_GetWindowSDL();
 rl_RLAPI void* rl_GetOpenGLContext();
+rl_RLAPI void rl_RegisterSDLEventCallback(rl_SDLEventCallback callback);
+rl_RLAPI void rl_UnregisterSDLEventCallback(rl_SDLEventCallback callback);
+
+// Window-related functions
+rl_RLAPI void rl_InitWindow(int width, int height, const char *title);  // Initialize window and OpenGL context
 rl_RLAPI void rl_CloseWindow(void);                                     // Close window and unload OpenGL context
 rl_RLAPI bool rl_WindowShouldClose(void);                               // Check if application should close (KEY_ESCAPE pressed or windows close icon clicked)
 rl_RLAPI bool rl_IsWindowReady(void);                                   // Check if window has been initialized successfully
